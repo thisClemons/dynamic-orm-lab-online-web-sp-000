@@ -65,11 +65,30 @@ class InteractiveRecord
         DB[:conn].execute(sql, name)
     end
 
+    
+
+    def self.find_by(attributes)
+
+        # binding.pry
+        sql = <<-SQL
+            SELECT * FROM #{self.table_name}
+            WHERE #{self.attributes_for_find(attributes)}
+        SQL
+
+        DB[:conn].execute(sql)
+    end
+
+    def self.attributes_for_find(attributes)
+        attributes.map do |key, value|
+            "#{key.to_sym} = '#{value}'"    
+        end.join(" AND ")        
+    end
+
     def scratch
         
         sql = <<-SQL
             SELECT * FROM students
-            WHERE name = ?
+            WHERE 
         SQL
     end
 
